@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Websocket Demo</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <!-- Sign in  -->
+    <div class="username-holder">
+      <h3 class="username-header">Enter username to join chat</h3>
+      <input
+        type="text"
+        name="username"
+        class="username-text"
+        placeholder="Enter username"
+      />
+      <button class="sign-btn">Sign In</button>
+    </div>
+
+    <!-- Chat body -->
+    <div class="container" hidden>
+      <!-- Side Bar -->
+      <div class="side-bar-container">
+        <div class="menu">
+          <h5 class="settings">Settings</h5>
+        </div>
+        <div class="side-bar"></div>
+      </div>
+
+      <!-- Message Holder -->
+      <div class="msg-holder">
+        <div class="user-info">
+          <h4 class="user-name current">User Name</h4>
+          <button class="exit-btn">Exit</button>
+        </div>
+
+        <!-- Message Box -->
+        <div class="msg-box-holder"></div>
+
+        <!-- Text area -->
+        <div id="input-box">
+          <!-- Should be a textarea instead -->
+          <input type="text" placeholder="Message" id="msg-text" />
+          <button type="button" id="emit-msg">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.min.js"></script>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>
