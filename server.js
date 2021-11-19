@@ -21,6 +21,7 @@ httpServer.on('upgrade', socket => {
 
 getDBInstance();
 
+const productionMode = process.env.NODE_ENV == 'production';
 const dbUrl = productionMode
   ? process.env.prodDBUrl
   : testMode
