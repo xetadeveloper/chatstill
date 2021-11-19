@@ -21,9 +21,15 @@ httpServer.on('upgrade', socket => {
 
 getDBInstance();
 
+const dbUrl = productionMode
+  ? process.env.prodDBUrl
+  : testMode
+  ? process.env.testDBUrl
+  : process.env.devDBUrl;
+
 const MongoDBStore = mongoConnect(session);
 export const store = new MongoDBStore({
-  uri: process.env.devDBUrl,
+  uri: dbUrl,
   collection: 'chatbotsession',
   expires: 1000 * 60 * 60 * 24 * 30, // 30 days in milliseconds
   connectionOptions: {
@@ -62,7 +68,7 @@ app.post('/login', async (req, res) => {
     res.status(400).json({ error: 'Cannot use group as username' });
     return;
   }
-  
+
   const db = await getDBInstance();
   const usersCol = db.collection('users');
 
