@@ -116,7 +116,7 @@ app.use((err, req, res, next) => {
   res.send('Error Occured');
 });
 
-httpServer.listen(5000, () => {
+httpServer.listen(processs.env.PORT || 5000, () => {
   console.log('Server started on port 5000....');
 });
 
