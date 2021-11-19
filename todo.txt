@@ -1,6 +1,7 @@
 Server
 ========
 * Implement password authentication
+* use session to automatically open chat until user exits
 
 Client
 =========

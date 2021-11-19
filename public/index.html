@@ -4,8 +4,26 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Websocket Demo</title>
+    <title>ChatStill</title>
     <link rel="stylesheet" href="main.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
   </head>
   <body>
     <!-- Sign in  -->
@@ -25,7 +43,8 @@
       <!-- Side Bar -->
       <div class="side-bar-container">
         <div class="menu">
-          <h5 class="settings">Settings</h5>
+          <i data-feather="menu" class="menu-item"></i>
+          <!-- <h5>ChatStill</h5> -->
         </div>
         <div class="side-bar"></div>
       </div>
@@ -34,7 +53,9 @@
       <div class="msg-holder">
         <div class="user-info">
           <h4 class="user-name current">User Name</h4>
-          <button class="exit-btn">Exit</button>
+          <button class="exit-btn">
+            <i data-feather='log-out'></i>
+          </button>
         </div>
 
         <!-- Message Box -->
@@ -42,14 +63,19 @@
 
         <!-- Text area -->
         <div id="input-box">
-          <!-- Should be a textarea instead -->
-          <input type="text" placeholder="Message" id="msg-text" />
-          <button type="button" id="emit-msg">Send</button>
+          <textarea name="message" id="msg-text"></textarea>
+          <button type="button" id="emit-msg">
+            <i data-feather="send"></i>
+          </button>
         </div>
       </div>
     </div>
 
     <script src="/socket.io/socket.io.min.js"></script>
     <script type="module" src="index.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+      feather.replace();
+    </script>
   </body>
 </html>

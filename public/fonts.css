@@ -1,0 +1,56 @@
+@font-face {
+  font-family: 'Comforter';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+    /* IE6-IE8 */
+      url('./assets/fonts/ComforterBrush/comforter-brush-v1-latin-regular.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */
+      url('./assets/fonts/ComforterBrush/comforter-brush-v1-latin-regular.woff')
+      format('woff'),
+    /* Modern Browsers */
+      url('./assets/fonts/ComforterBrush/comforter-brush-v1-latin-regular.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('./assets/fonts/ComforterBrush/comforter-brush-v1-latin-regular.svg')
+      format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Garamond';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+    /* IE6-IE8 */
+      url('./assets/fonts/EBGaramond/eb-garamond-v19-latin-regular.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */
+      url('./assets/fonts/EBGaramond/eb-garamond-v19-latin-regular.woff')
+      format('woff'),
+    /* Modern Browsers */
+      url('./assets/fonts/EBGaramond/eb-garamond-v19-latin-regular.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('./assets/fonts/EBGaramond/eb-garamond-v19-latin-regular.svg')
+      format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Playfair';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+    /* IE6-IE8 */
+      url('./assets/fonts/PlayfairDisplay/playfair-display-v22-latin-regular.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */
+      url('./assets/fonts/PlayfairDisplay/playfair-display-v22-latin-regular.woff')
+      format('woff'),
+    /* Modern Browsers */
+      url('./assets/fonts/PlayfairDisplay/playfair-display-v22-latin-regular.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('./assets/fonts/PlayfairDisplay/playfair-display-v22-latin-regular.svg')
+      format('svg'); /* Legacy iOS */
+}

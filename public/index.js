@@ -10,6 +10,8 @@ const signInBtn = document.querySelector('.sign-btn');
 const exitBtn = document.querySelector('.exit-btn');
 const usernameInput = document.querySelector('.username-text');
 const container = document.querySelector('.container');
+const menuBtn = document.querySelector('.menu-item');
+const sideBarContainer = document.querySelector('.side-bar-container');
 const usernameHolder = document.querySelector('.username-holder');
 
 window.onload = () => {
@@ -138,4 +140,13 @@ window.addEventListener('beforeunload', evt => {
   evt.preventDefault();
 
   socket.disconnect();
+});
+
+menuBtn.addEventListener('click', evt => {
+  sideBarContainer.classList.toggle('show-side-bar');
+  const nameItem = document.querySelectorAll('.name-item');
+  console.log('Name items: ', nameItem);
+  nameItem.forEach(item => {
+    item.classList.toggle('show-name-item');
+  });
 });

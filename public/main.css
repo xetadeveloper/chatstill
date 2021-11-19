@@ -1,3 +1,6 @@
+@import url('./fonts.css');
+@import url(./reset.css);
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,12 +12,19 @@ body {
   /* border: 1px solid black; */
   padding: 0;
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Playfair;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* font-size: 1.3em; */
   /* overflow: hidden; */
+}
+
+@media screen and (max-width: 425px) {
+  body {
+    font-size: 0.9rem;
+  }
 }
 
 .username-header {
@@ -57,13 +67,29 @@ body {
   color: white;
   /* border: 1px solid black; */
   overflow: hidden;
+  font-family: inherit;
+}
+
+@media screen and (max-width: 425px) {
+  .side-bar-container {
+    max-width: 60px;
+    min-width: 0;
+    transition: min-width 0.3s ease-in-out;
+    /* border: 1px solid black; */
+  }
+}
+
+.show-side-bar {
+  min-width: 200px;
+  transition: min-width 0.3s ease-in-out;
 }
 
 .menu {
   height: 60px;
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
+  gap: 30px;
   padding: 0 10px;
   border-bottom: 1px solid grey;
 }
@@ -75,17 +101,36 @@ body {
   overflow: auto;
   height: 100%;
 }
-.settings {
+
+.menu-item {
   cursor: pointer;
-  padding: 5px;
+}
+
+@media screen and (min-width: 425px) {
+  .menu-item {
+    display: none;
+  }
+}
+
+.menu-item:hover {
+  color: #242479;
 }
 
 .name-item {
   border-bottom: 1px solid #d3d3d377;
   color: white;
   padding: 10px;
-  font-family: Helvetica;
   cursor: pointer;
+}
+
+@media screen and (max-width: 425px) {
+  .name-item {
+    visibility: hidden;
+  }
+}
+
+.show-name-item {
+  visibility: visible;
 }
 
 .name-item:hover,
@@ -182,6 +227,10 @@ body {
   border-radius: 5px;
 }
 
+.exit-btn > svg {
+  height: 15px;
+}
+
 .exit-btn:hover {
   background-color: #f53939;
   color: white;
@@ -220,13 +269,28 @@ body {
   gap: 20px;
 }
 
+@media screen and (max-width: 425px) {
+  #input-box {
+    gap: 10px;
+  }
+}
+
 #msg-text {
-  height: 40px;
-  /* width: 100%; */
+  min-height: 40px;
+  max-height: 100px;
   flex-grow: 2;
   border-radius: 10px;
   border: 1px solid grey;
-  padding: 0 10px;
+  padding: 10px 10px;
+  resize: none;
+  font: inherit;
+  line-height: 25px;
+}
+
+@media screen and (max-width: 425px) {
+  #msg-text {
+    width: 80px;
+  }
 }
 
 #emit-msg,
@@ -238,12 +302,17 @@ body {
   border-radius: 5px;
   cursor: pointer;
   padding: 10px;
+  font-family: inherit;
 }
 
 #emit-msg:hover,
 #broadcast-msg:hover {
   background-color: #9c9cf0;
   color: #3f3e3e;
+}
+
+#emit-msg > svg {
+  height: 20px;
 }
 
 #broadcast-msg {
