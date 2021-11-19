@@ -1,3 +1,6 @@
 node_modules
 example.js
 test.js
+
+
+.env
