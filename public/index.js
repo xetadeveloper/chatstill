@@ -1,36 +1,53 @@
 import { activateListeners } from './Listeners/listeners.js';
 import { login, sendMsg, sendPrivateMsg } from './Emitters/emitters.js';
 import { createSenderMsg } from './helper.js';
+import { socket } from './config.js';
 
-const socket = io({
-  autoConnect: false,
-});
-
+// HTML elements
 const msgBtn = document.querySelector('#emit-msg');
 const msgInput = document.querySelector('#msg-text');
 const signInBtn = document.querySelector('.sign-btn');
+const exitBtn = document.querySelector('.exit-btn');
 const usernameInput = document.querySelector('.username-text');
+const container = document.querySelector('.container');
+const usernameHolder = document.querySelector('.username-holder');
 
 window.onload = () => {
   usernameInput.focus();
 };
 
-const onlineList = [];
-activateListeners(socket, onlineList);
+let onlineList = [];
+let users = [];
+activateListeners(socket, onlineList, users);
 const userNameHeader = document.querySelectorAll('.user-name');
 
 // For signing in
-signInBtn.addEventListener('click', evt => {
+signInBtn.addEventListener('click', async evt => {
   evt.preventDefault();
-  const usernameTxt = usernameInput.value;
+  const usernameTxt = usernameInput.value.trim();
 
-  userNameHeader.forEach(elem => {
-    elem.innerHTML = usernameTxt;
+  const response = await fetch('/login', {
+    body: JSON.stringify({
+      username: usernameTxt,
+    }),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 
-  socket.connect();
-  socket.auth = { username: usernameTxt };
-  login(socket, onlineList);
+  if (response.status === 201) {
+    userNameHeader.forEach(elem => {
+      elem.innerHTML = usernameTxt;
+    });
+
+    socket.connect();
+    socket.auth = { username: usernameTxt };
+    login(socket, onlineList, users);
+  } else {
+    const { error } = await response.json();
+    console.log('Unable to login to chat: ', error);
+  }
 });
 
 // For sending messages
@@ -44,28 +61,62 @@ msgBtn.addEventListener('click', evt => {
 
   //   Send the message
   const msgBoxes = document.querySelectorAll('.msg-box');
-  console.log('Length of msgboxes: ', msgBoxes.length);
+
   let msgBox;
+  let toUsername;
+
   msgBoxes.forEach(box => {
     if (!box.classList.contains('hide-box')) {
       msgBox = box;
+      toUsername = box.getAttribute('data-user');
     }
   });
 
-
-  if (msgBox) {
+  if (toUsername) {
+    const msgSpan = msgBox.querySelector('user-joined');
+    if (msgSpan) {
+      msgBox.removeChild(msgSpan);
+    }
     createSenderMsg(msgBox, msgText);
+
     if (activeChat === 'Group') {
       sendMsg(socket, msgText);
     } else {
-      console.log('Online list: ', onlineList);
+      console.log('Online list in PM: ', onlineList);
       const to = onlineList.find(user => user.username === activeChat);
-      sendPrivateMsg(socket, msgText, to);
+
+      if (to) {
+        console.log('PM to: ', to);
+        sendPrivateMsg(socket, msgText, to);
+      } else {
+        // Store msg in index db
+        console.log('User with id is offline: ', toUsername);
+      }
     }
 
     msgInput.value = '';
     msgInput.focus();
   }
+});
+
+// For exiting application
+exitBtn.addEventListener('click', () => {
+  container.classList.remove('show-container');
+  usernameHolder.classList.remove('hide-sign-in');
+  usernameInput.value = '';
+  usernameInput.focus();
+
+  // Clear onlineList, msgBoxes and sidebar chats
+  onlineList = [];
+  users = [];
+
+  const boxHolder = document.querySelector('.msg-box-holder');
+  boxHolder.replaceChildren('');
+
+  const sideBar = document.querySelector('.side-bar');
+  sideBar.replaceChildren('');
+
+  socket.disconnect();
 });
 
 // For the enter key
@@ -81,4 +132,10 @@ usernameInput.addEventListener('keyup', evt => {
     evt.preventDefault();
     signInBtn.click();
   }
+});
+
+window.addEventListener('beforeunload', evt => {
+  evt.preventDefault();
+
+  socket.disconnect();
 });

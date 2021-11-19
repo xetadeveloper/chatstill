@@ -257,7 +257,7 @@ body {
   min-width: 200px;
   padding: 10px;
   align-self: flex-start;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: #5454e9;
   color: white;
   display: flex;
@@ -272,6 +272,7 @@ body {
 .receive-msg {
   /* Move to the right */
   align-self: flex-end;
+  background-color: #474747;
 }
 
 .show-container {

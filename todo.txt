@@ -1,0 +1,8 @@
+Server
+========
+* Implement password authentication
+
+Client
+=========
+* Use a worker thread to implement checking for online users and sending any offline messages as soon as they come online
+* Create error dialog

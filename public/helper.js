@@ -1,14 +1,46 @@
+import { socket } from './config.js';
+
 const msgBoxHolder = document.querySelector('.msg-box-holder');
 const sideBar = document.querySelector('.side-bar');
 
-export function userJoined(msgBox, username) {
-  msgBox.append(createJoinedMessage(username));
-  sideBar.append(createNewUser(username));
-  addMsgBox(username);
+export function userJoined(msgBox, user, usersList) {
+  // If new user then create user
+  // else change user to onine
+  // console.log('User in userJoined: ', user.username);
+  // console.log('usersList in userJoined: ', usersList);
+
+  const userFound = usersList.find(
+    userItem => userItem.username === user.username
+  );
+
+  // console.log('UserFound from list: ', userFound);
+
+  if (userFound) {
+    // Existing user
+    // console.log('Existing user: ', user.username);
+    const onlineText = document.querySelector(
+      `.name-item[data-user=${user.username}] .online-text`
+    );
+
+    const onlineCircle = document.querySelector(
+      `.name-item[data-user=${user.username}] .online-circle`
+    );
+
+    onlineText.innerHTML = 'online';
+    onlineCircle.classList.remove('offline');
+  } else {
+    // console.log('New user: ', user.username);
+    sideBar.append(createNewUser(user.username, false, true));
+    addMsgBox(user.username);
+    usersList.push(user);
+  }
+
+  msgBox.append(createJoinedMessage(user.username));
 }
 
 export function userLoggedIn(username) {
-  sideBar.prepend(createNewUser(username, true));
+  // Add the group chat to the list of chats
+  sideBar.prepend(createNewUser(username, true, true));
   addMsgBox(username, false);
 }
 
@@ -31,8 +63,10 @@ function showMsgBox(username) {
   });
 }
 
+export function getPMMessages(toUser) {}
+
 function addMsgBox(username, hidden = true) {
-  const msgBox = createMsgBox(username);
+  const msgBox = createMsgBox(username, !hidden);
 
   if (hidden) {
     msgBox.classList.add('hide-box');
@@ -66,7 +100,7 @@ export function createRecipientMsg(msgBox, msg) {
   msgBox.appendChild(msgDiv);
 }
 
-export function createNewUser(username, current = false) {
+export function createNewUser(username, current = false, userOnline) {
   // <div class='name-item'>
   //   <h4 class='name-header'>No Gorup</h4>
   //   <div class='online'>
@@ -81,11 +115,14 @@ export function createNewUser(username, current = false) {
   // online-text
   const onlineText = document.createElement('h6');
   onlineText.classList.add('online-text');
-  onlineText.innerHTML = 'online';
+  onlineText.innerHTML = userOnline ? 'online' : 'offline';
 
   // online-circle
   const onlineCircle = document.createElement('div');
   onlineCircle.classList.add('online-circle');
+  if (!userOnline) {
+    onlineCircle.classList.add('offline');
+  }
 
   // online-status
   const onlineStatus = document.createElement('div');
@@ -124,6 +161,35 @@ export function createNewUser(username, current = false) {
 
   nameItem.addEventListener('click', evt => {
     showMsgBox(username);
+    const msgBox = document.querySelector(`.msg-box[data-user=${username}]`);
+
+    if (!msgBox.getAttribute('data-msg-received')) {
+      // Get all messages for this chat first from server
+      socket.emit('get-pm-messages', username, msgList => {
+        console.log('Gotten msglist: ', msgList);
+        msgBox.setAttribute('data-msg-received', true);
+        if (msgList.length) {
+          const msgSpan = msgBox.querySelector('user-joined');
+          if (msgSpan) {
+            msgBox.removeChild(msgSpan);
+          }
+
+          msgList.sort((a, b) => a.number - b.number);
+          msgList.forEach(msgItem => {
+            if (msgItem.toUser === username) {
+              createSenderMsg(msgBox, msgItem.message);
+            } else {
+              createRecipientMsg(msgBox, msgItem.message);
+            }
+          });
+        } else {
+          // Show send a message text in msg box
+          msgBox.append(
+            createJoinedMessage(null, `Send a message to ${username}`)
+          );
+        }
+      });
+    }
 
     // Get current active chat
     const activeUser = document.querySelector('.user-active');
@@ -161,17 +227,20 @@ export function createJoinedMessage(username, msg) {
 
 export function createUsersList(users) {
   const list = users.map(user => {
-    addMsgBox(user);
-    return createNewUser(user);
+    addMsgBox(user.username);
+    return createNewUser(user.username, false, user.online);
   });
 
   sideBar.replaceChildren(...list);
 }
 
-export function createMsgBox(username) {
+export function createMsgBox(username, current) {
   const msgBox = document.createElement('div');
   msgBox.classList.add('msg-box');
   msgBox.setAttribute('data-user', username);
+  if (current) {
+    msgBox.setAttribute('data-group', true);
+  }
 
   return msgBox;
 }
