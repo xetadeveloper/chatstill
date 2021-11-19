@@ -74,6 +74,7 @@ export default function startWebsocket(httpServer) {
       console.log('Server received a chat message: ', msg);
 
       try {
+        const db = await getDBInstance();
         const messagesCol = db.collection('messages');
 
         const msgCount = await messagesCol.countDocuments({
@@ -179,6 +180,26 @@ export default function startWebsocket(httpServer) {
             fromUser: { $in: [socket.handshake.auth.username, toUser] },
             toUser: { $in: [socket.handshake.auth.username, toUser] },
             type: 'private',
+          })
+          .toArray();
+
+        console.log('msgList gotten: ', msgList);
+
+        callback(msgList);
+      } catch (error) {
+        console.log('Error occured in db: ', error);
+      }
+    });
+
+    socket.on('get-group-messages', async (toUser, callback) => {
+      try {
+        console.log('Getting all group messages: ', toUser);
+        const db = await getDBInstance();
+        const messagesCol = db.collection('messages');
+
+        const msgList = await messagesCol
+          .find({
+            $and: [{ toUser: 'group' }, { type: 'group' }],
           })
           .toArray();
 

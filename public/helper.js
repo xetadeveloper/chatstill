@@ -3,11 +3,13 @@ import { socket } from './config.js';
 const msgBoxHolder = document.querySelector('.msg-box-holder');
 const sideBar = document.querySelector('.side-bar');
 
-export function userJoined(msgBox, user, usersList) {
+export function userJoined(msgBox, user, usersList, onlineList) {
   // If new user then create user
   // else change user to onine
   // console.log('User in userJoined: ', user.username);
   // console.log('usersList in userJoined: ', usersList);
+
+  console.log('New User: ', user);
 
   const userFound = usersList.find(
     userItem => userItem.username === user.username
@@ -32,9 +34,10 @@ export function userJoined(msgBox, user, usersList) {
     // console.log('New user: ', user.username);
     sideBar.append(createNewUser(user.username, false, true));
     addMsgBox(user.username);
-    usersList.push(user);
   }
 
+  usersList.push(user);
+  onlineList.push(user);
   msgBox.append(createJoinedMessage(user.username));
 }
 
@@ -42,10 +45,13 @@ export function userLoggedIn(username) {
   // Add the group chat to the list of chats
   sideBar.prepend(createNewUser(username, true, true));
   addMsgBox(username, false);
+  const nameItem = document.querySelector(`.name-item[data-group=${true}]`);
+  nameItem.click();
 }
 
 export function showError(msg) {
   // Show the error message
+  alert('Error: ', msg);
 }
 
 function showMsgBox(username) {
@@ -76,26 +82,41 @@ function addMsgBox(username, hidden = true) {
 }
 
 // Creates HTMl elements
-export function createSenderMsg(msgBox, msg) {
+export function createSenderMsg(msgBox, msg, userTag) {
   let msgDiv = document.createElement('div');
   let msgSpan = document.createElement('span');
+  let userSpan = document.createElement('h6');
 
   msgDiv.classList.add('send-msg');
   msgSpan.classList.add('msg-span');
   msgSpan.innerHTML = msg;
 
+  if (userTag) {
+    userSpan.innerHTML = userTag;
+    msgDiv.append(userSpan);
+  } else if (msgBox.getAttribute('data-group')) {
+    userSpan.innerHTML = 'Me';
+    msgDiv.append(userSpan);
+  }
+
   msgDiv.appendChild(msgSpan);
   msgBox.appendChild(msgDiv);
 }
 
-export function createRecipientMsg(msgBox, msg) {
+export function createRecipientMsg(msgBox, msg, userTag) {
   let msgDiv = document.createElement('div');
   let msgSpan = document.createElement('span');
+  let userSpan = document.createElement('h6');
 
   msgDiv.classList.add('receive-msg');
   msgSpan.classList.add('msg-span');
   msgSpan.innerHTML = msg;
 
+  userSpan.innerHTML = userTag;
+
+  if (userTag) {
+    msgDiv.append(userSpan);
+  }
   msgDiv.appendChild(msgSpan);
   msgBox.appendChild(msgDiv);
 }
@@ -160,35 +181,52 @@ export function createNewUser(username, current = false, userOnline) {
   }
 
   nameItem.addEventListener('click', evt => {
+    console.log('username name item: ', username);
     showMsgBox(username);
+    const groupMsgs = nameItem.getAttribute('data-group');
     const msgBox = document.querySelector(`.msg-box[data-user=${username}]`);
 
     if (!msgBox.getAttribute('data-msg-received')) {
       // Get all messages for this chat first from server
-      socket.emit('get-pm-messages', username, msgList => {
-        console.log('Gotten msglist: ', msgList);
-        msgBox.setAttribute('data-msg-received', true);
-        if (msgList.length) {
-          const msgSpan = msgBox.querySelector('user-joined');
-          if (msgSpan) {
-            msgBox.removeChild(msgSpan);
-          }
+      socket.emit(
+        groupMsgs ? 'get-group-messages' : 'get-pm-messages',
+        username,
+        msgList => {
+          console.log('Gotten msglist: ', msgList);
+          msgBox.setAttribute('data-msg-received', true);
+          if (msgList.length) {
+            // const msgSpan = msgBox.querySelector('user-joined');
+            // if (msgSpan) {
+            //   msgBox.removeChild(msgSpan);
+            // }
 
-          msgList.sort((a, b) => a.number - b.number);
-          msgList.forEach(msgItem => {
-            if (msgItem.toUser === username) {
-              createSenderMsg(msgBox, msgItem.message);
-            } else {
-              createRecipientMsg(msgBox, msgItem.message);
-            }
-          });
-        } else {
-          // Show send a message text in msg box
-          msgBox.append(
-            createJoinedMessage(null, `Send a message to ${username}`)
-          );
+            msgList.sort((a, b) => a.number - b.number);
+            msgList.forEach(msgItem => {
+              if (msgItem.toUser === username) {
+                createSenderMsg(msgBox, msgItem.message);
+              } else if (
+                msgItem.toUser === 'group' &&
+                msgItem.fromUser === socket.auth.username
+              ) {
+                createSenderMsg(msgBox, msgItem.message, 'Me');
+              } else if (
+                msgItem.toUser === 'group' &&
+                !(msgItem.fromUser === socket.auth.username)
+              ) {
+                console.log('Adding gorup user msg from another user');
+                createRecipientMsg(msgBox, msgItem.message, msgItem.fromUser);
+              } else {
+                createRecipientMsg(msgBox, msgItem.message);
+              }
+            });
+          } else {
+            // Show send a message text in msg box
+            msgBox.append(
+              createJoinedMessage(null, `Send a message to ${username}`)
+            );
+          }
         }
-      });
+      );
     }
 
     // Get current active chat

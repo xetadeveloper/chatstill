@@ -1,6 +1,7 @@
 import {
   createJoinedMessage,
   createRecipientMsg,
+  showError,
   userJoined,
 } from '../helper.js';
 
@@ -48,6 +49,7 @@ export function activateListeners(socket, onlineList, usersList) {
   socket.on('db-error', error => {
     // Handle error
     console.log('Error on server: ', error);
+    showError(error);
   });
 
   socket.on('user-joined', user => {
@@ -55,7 +57,7 @@ export function activateListeners(socket, onlineList, usersList) {
 
     onlineList.push(user);
     // console.log('New online list: ', onlineList);
-    userJoined(groupMsgBox, user, usersList);
+    userJoined(groupMsgBox, user, usersList, onlineList);
   });
 
   socket.on('user-left', ({ username, _id }) => {
