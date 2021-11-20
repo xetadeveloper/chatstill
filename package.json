@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "start-dev": "nodemon server.js"
   },
   "keywords": [],
@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "mongodb": "^4.2.0",
+    "pm2": "^5.1.2",
     "socket.io": "^4.3.2",
     "uuid": "^8.3.2"
   }
