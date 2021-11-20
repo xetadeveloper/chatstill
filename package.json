@@ -9,13 +9,14 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2-runtime start ecosystem.config.js --env production",
+    "start": "pm2-runtime start ecosystem.config.cjs --env production",
     "start-dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "-": "^0.0.1",
     "connect-mongodb-session": "^3.1.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",

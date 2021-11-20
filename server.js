@@ -70,11 +70,11 @@ app.post('/login', async (req, res) => {
     return;
   }
 
-  const db = await getDBInstance();
-  const usersCol = db.collection('users');
-
-  const user = await usersCol.findOne({ username: username });
   try {
+    const db = await getDBInstance();
+    const usersCol = db.collection('users');
+
+    const user = await usersCol.findOne({ username: username });
     if (user) {
       // If existing user, then update the user sessionID and return 201
       const { acknowledged, matchedCount } = await usersCol.updateOne(
