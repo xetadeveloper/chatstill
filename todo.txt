@@ -2,8 +2,9 @@ Server
 ========
 * Implement password authentication
 * use session to automatically open chat until user exits
+* add pm2 for clustering server
 
 Client
 =========
 * Use a worker thread to implement checking for online users and sending any offline messages as soon as they come online
-* Create error dialog
+* Create error dialog (using alert for now)

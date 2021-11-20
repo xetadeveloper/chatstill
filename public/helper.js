@@ -101,6 +101,7 @@ export function createSenderMsg(msgBox, msg, userTag) {
 
   msgDiv.appendChild(msgSpan);
   msgBox.appendChild(msgDiv);
+  msgBox.scrollTop = msgBox.scrollHeight;
 }
 
 export function createRecipientMsg(msgBox, msg, userTag) {
@@ -112,13 +113,15 @@ export function createRecipientMsg(msgBox, msg, userTag) {
   msgSpan.classList.add('msg-span');
   msgSpan.innerHTML = msg;
 
-  userSpan.innerHTML = userTag;
-
   if (userTag) {
+    userSpan.innerHTML = userTag;
     msgDiv.append(userSpan);
   }
+
   msgDiv.appendChild(msgSpan);
   msgBox.appendChild(msgDiv);
+
+  msgBox.scrollTop = msgBox.scrollHeight;
 }
 
 export function createNewUser(username, current = false, userOnline) {

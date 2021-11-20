@@ -85,7 +85,7 @@ export function activateListeners(socket, onlineList, usersList) {
     });
   });
 
-  socket.on('chat-message', msg => {
+  socket.on('chat-message', (msg, from) => {
     const groupMsgBox = document.querySelector(
       `.msg-box[data-user=${socket.auth.username}]`
     );
@@ -94,7 +94,7 @@ export function activateListeners(socket, onlineList, usersList) {
 
     addMsgCount(groupChat);
 
-    createRecipientMsg(groupMsgBox, msg);
+    createRecipientMsg(groupMsgBox, msg, from);
   });
 
   socket.on('private-message', (msg, fromUser) => {

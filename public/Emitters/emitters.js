@@ -14,8 +14,6 @@ export function sendPrivateMsg(socket, msg, to) {
   // console.log('Sent a private message...', msg);
 }
 
-
-
 export function login(socket, onlineList, users) {
   socket.emit('login', ({ ok, userOnlineList, usersList }) => {
     // console.log('Online list received on login: ', userOnlineList);

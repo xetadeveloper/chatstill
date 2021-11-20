@@ -71,7 +71,8 @@ export default function startWebsocket(httpServer) {
     });
 
     socket.on('chat-message', async msg => {
-      console.log('Server received a chat message: ', msg);
+      // console.log('Server received a chat message: ', msg);
+      // console.log('Group message from : ', socket.handshake.auth.username);
 
       try {
         const db = await getDBInstance();
@@ -81,7 +82,7 @@ export default function startWebsocket(httpServer) {
           $and: [{ toUser: 'group' }, { type: 'group' }],
         });
 
-        console.log('msgCount: ', msgCount);
+        // console.log('msgCount: ', msgCount);
 
         await messagesCol.insertOne({
           type: 'group',
@@ -90,7 +91,12 @@ export default function startWebsocket(httpServer) {
           number: msgCount + 1,
           message: msg,
         });
-        socket.broadcast.emit('chat-message', msg);
+
+        socket.broadcast.emit(
+          'chat-message',
+          msg,
+          socket.handshake.auth.username
+        );
       } catch (error) {
         console.log('Error occured: ', error);
       }
@@ -183,7 +189,7 @@ export default function startWebsocket(httpServer) {
           })
           .toArray();
 
-        console.log('msgList gotten: ', msgList);
+        // console.log('msgList gotten: ', msgList);
 
         callback(msgList);
       } catch (error) {
@@ -203,7 +209,7 @@ export default function startWebsocket(httpServer) {
           })
           .toArray();
 
-        console.log('msgList gotten: ', msgList);
+        // console.log('msgList gotten: ', msgList);
 
         callback(msgList);
       } catch (error) {
