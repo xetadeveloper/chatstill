@@ -9,16 +9,12 @@
 
 body {
   height: 100vh;
-  /* border: 1px solid black; */
-  padding: 0;
-  margin: 0;
   font-family: Playfair;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* font-size: 1.3em; */
-  /* overflow: hidden; */
+  background-image: url('./assets/images/background3.jpg');
+  background-position-y: bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #3f3e3e;
 }
 
 @media screen and (max-width: 425px) {
@@ -27,9 +23,34 @@ body {
   }
 }
 
+.overlay {
+  background-color: #5454e946;
+  height: inherit;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  font-size: 2.5em;
+  font-weight: 800;
+  color: #363636;
+  color: white;
+  text-shadow: 2px 2px #5454e9;
+}
+
+.username-holder {
+  /* color: white; */
+}
+
 .username-header {
   margin-bottom: 20px;
   color: #3f3e3e;
+  color: white;
 }
 
 .username-text {
@@ -212,6 +233,9 @@ body {
   border-bottom: 1px solid #bbbbbb;
   height: 60px;
   color: #3f3e3e;
+  color: white;
+  font-weight: 800;
+  letter-spacing: 1px;
   padding: 10px 30px;
   display: flex;
   justify-content: space-between;
