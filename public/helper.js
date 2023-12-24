@@ -1,4 +1,4 @@
-import { socket } from './socket-io-config.js/index.js';
+import { socket } from './socket-io-config.js';
 
 const msgBoxHolder = document.querySelector('.msg-box-holder');
 const sideBar = document.querySelector('.side-bar');
