@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { getDBInstance } from './Database/mongoDB.js';
+import { getDBInstance } from '../Database/mongoDB.js';
 import { store } from './server.js';
 import mongoTypes from 'mongodb';
 

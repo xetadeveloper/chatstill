@@ -6,7 +6,7 @@ import mongoConnect from 'connect-mongodb-session';
 import { v4 } from 'uuid';
 import { createServer } from 'http';
 import startWebsocket from './socketio.js';
-import { getDBInstance } from './Database/mongoDB.js';
+import { getDBInstance } from '../Database/mongoDB.js';
 
 const app = express();
 const httpServer = createServer(app);
