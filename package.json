@@ -5,12 +5,14 @@
   "main": "src/server.js",
   "type": "module",
   "engines": {
-    "node": "15.6.0"
+    "node": "18.17.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start": "node --es-module-specifier-resolution=node dist/src/server.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon --es-module-specifier-resolution=node dist/src/server.js\"",
+    "dev:dist": "nodemon --es-module-specifier-resolution=node dist/src/server.js",
+    "build": "yarn run tsc"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +26,13 @@
     "mongodb": "^4.2.0",
     "socket.io": "^4.3.2",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/connect-mongodb-session": "^2.4.7",
+    "@types/express-session": "^1.17.10",
+    "@types/node": "^20.10.5",
+    "@types/uuid": "^9.0.7",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
   }
 }

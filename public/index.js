@@ -53,7 +53,7 @@ signInBtn.addEventListener('click', async evt => {
 });
 
 // For sending messages
-msgBtn.addEventListener('click', evt => {
+msgBtn?.addEventListener('click', evt => {
     evt.preventDefault();
 
     const msgText = msgInput.value;
