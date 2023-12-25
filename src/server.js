@@ -22,11 +22,7 @@ httpServer.on('upgrade', socket => {
 getDBInstance();
 
 const productionMode = process.env.NODE_ENV == 'production';
-const dbUrl = productionMode
-    ? process.env.prodDBUrl
-    : testMode
-    ? process.env.testDBUrl
-    : process.env.devDBUrl;
+const dbUrl = productionMode ? process.env.prodDBUrl : process.env.devDBUrl;
 
 const MongoDBStore = mongoConnect(session);
 export const store = new MongoDBStore({
